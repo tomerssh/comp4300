@@ -1,0 +1,59 @@
+stack variables get destructed when they leave scope
+
+all stack memory allocations need to be known at compile time
+
+memory allocation which depends on 
+runtime variables (dynamic memory size) 
+must be heap allocated
+
+new keyword calls c function malloc, very expensive
+
+if you use new you must use delete to free heap memory
+
+shared ptr handles raii automatically
+
+
+memory allocations
+integer
+int val = 5; // stack
+int* hval = new int; // heap
+*hval = 5;
+delete hval;
+	 
+array
+int a[5]; // stack
+int* ha = new int[5]; // heap
+ha[3] = 10;
+delete ha;
+
+class
+MyClass c(args); // stack
+MyClass* hc = new MyClass(args); // heap
+delete hc;
+
+pointers
+can reference stack allocated variables
+int i = 6; // local int var
+int* p; // pointer to int
+p = &i; // & = 'address  of'
+*p = 7; // * = 'dereference'
+
+pass primitive data types by value
+referencing has an extra 'dereference' step
+which is slower when using primitives
+int add(const int& a, const int& b); // bad
+int add(const int a, const int b); // good
+
+RAII
+bind resource (that must be acquired before use) lifecycle 
+to the lifetime of an object
+encapsulate each resource into a class,
+constructor acquires the resource and initializes it,
+destructor releases the resource
+
+how to allocate / pass data?
+if possible use the stack
+if you need heap memory, use smart ptr
+std::shared_ptr<T> myBigData;
+std::shared_ptr<Base> = std::make_shared<Derived>();
+don't use new keywod or raw pointers unless absolutely necessary
